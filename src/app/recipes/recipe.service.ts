@@ -4,10 +4,8 @@ import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Recipe } from './recipe.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class RecipeService {
-  constructor(private shoppingListService: ShoppingListService) {}
-
   private recipes: Recipe[] = [
     new Recipe(
       'Tasty Schnitzel',
@@ -23,13 +21,36 @@ export class RecipeService {
     ),
   ];
 
-  getRecipes() {
+  recipesChanged = new Subject<Recipe[]>();
+
+  constructor(private shoppingListService: ShoppingListService) {}
+
+  triggerRecipesChanged() {
     // returns a new array, exact copy of this
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  getRecipes() {
     return this.recipes.slice();
   }
 
   getRecipeById(id: number) {
     return this.recipes[id];
+  }
+
+  addRecipe(recipe: Recipe) {
+    this.recipes.push(recipe);
+    this.triggerRecipesChanged();
+  }
+
+  updateRecipe(index: number, recipe: Recipe) {
+    this.recipes[index] = recipe;
+    this.triggerRecipesChanged();
+  }
+
+  deleteRecipe(index: number) {
+    this.recipes.splice(index, 1);
+    this.triggerRecipesChanged();
   }
 
   sendToShoppingList(ingredients: Ingredient[]): void {

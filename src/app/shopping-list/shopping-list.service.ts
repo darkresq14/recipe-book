@@ -10,23 +10,42 @@ export class ShoppingListService {
   ];
 
   ingredientsChanged = new Subject<Ingredient[]>();
+  startedEditing = new Subject<number>();
+
+  triggerIngredientsChanged() {
+    this.ingredientsChanged.next(this.ingredients.slice());
+  }
 
   getIngredients() {
     return this.ingredients.slice();
   }
 
+  getIngredientById(id: number): Ingredient {
+    return this.ingredients[id];
+  }
+
   addIngredient(ingredient: Ingredient) {
     this.ingredients.push(ingredient);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    this.triggerIngredientsChanged();
   }
 
   addIngredients(ingredients: Ingredient[]) {
     this.ingredients.push(...ingredients);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    this.triggerIngredientsChanged();
+  }
+
+  updateIngredient(index: number, newIngredient: Ingredient) {
+    this.ingredients[index] = newIngredient;
+    this.triggerIngredientsChanged();
+  }
+
+  deleteIngredient(index: number) {
+    this.ingredients.splice(index, 1);
+    this.triggerIngredientsChanged();
   }
 
   clearIngredients(): void {
     this.ingredients = [];
-    this.ingredientsChanged.next(this.ingredients.slice());
+    this.triggerIngredientsChanged();
   }
 }
