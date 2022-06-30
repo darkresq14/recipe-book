@@ -48,7 +48,6 @@ export class RecipeService {
   setRecipes(recipes: Recipe[]): void {
     this.recipes = recipes;
     this.triggerRecipesChanged();
-    console.log(this.recipes);
   }
 
   updateRecipe(index: number, recipe: Recipe) {
