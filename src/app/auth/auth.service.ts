@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { User } from './user.model';
 
 export interface LoginResponseData {
@@ -18,7 +19,7 @@ export interface SignupResponseData extends LoginResponseData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  API_KEY = 'AIzaSyBafUwS7-aRsoUiCBzX6j5UxxuEpRX6PVo';
+  API_KEY = environment.FIREBASE_API_KEY;
   SIGN_UP_URL =
     'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' +
     this.API_KEY;
